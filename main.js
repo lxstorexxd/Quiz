@@ -1,4 +1,6 @@
 let questions = []; // Массив с вопросами
+let totalQuestions = 0;
+let currentQuestionNumber = 0;
 
 // Функция для загрузки вопросов из файла
 function loadQuestions() {
@@ -6,6 +8,7 @@ function loadQuestions() {
     .then((response) => response.json())
     .then((data) => {
       questions = data;
+      totalQuestions = questions.length;
       shuffleQuestions();
       displayQuestion();
     })
@@ -32,10 +35,14 @@ function shuffleQuestions() {
 function displayQuestion() {
   const questionElement = document.getElementById("question_text");
   const answersContainer = document.getElementById("variant_answers");
+  const countQuestion = document.getElementById("count_question");
   answersContainer.innerHTML = ""; // Очищаем контейнер с вариантами ответов
 
   if (questions.length > 0) {
     const currentQuestion = questions.pop(); // Получаем текущий вопрос из массива и удаляем его
+    currentQuestionNumber = totalQuestions - questions.length;
+    countQuestion.innerHTML = `<b>${currentQuestionNumber}</b>/${totalQuestions}`;
+
     questionElement.textContent = currentQuestion.question;
 
     const allAnswers = currentQuestion.incorrect_answers.concat(
